@@ -1,1 +1,0 @@
-To install pycairo for windows, see https://stackoverflow.com/questions/48131876/pycairo-installation-on-windows?rq=1
