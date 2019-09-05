@@ -1,0 +1,21 @@
+~~Design Choices~~
+We can either use pycairo and create our own functions for creating triangles, etc. and keeping track of the shapes s
+I want to be able to objects relative to other objects, get objects center, top, etc. I do not think pycairo out the box supports dealing with objects ala inkscape, it seems that it simply draws to context. 
+
+~Language options~
+Python: I know it, I like it. Most of my projects are (will be?) in python, so it is better for interfacing
+JS: Good for web stuff, has more developed libraries. Can we use this for Unity graphics, more easily than python?
+~SVG Library Options~
+Python:
+	pycairo
+	cairocffi
+		neither of the above support the level of object-orientedness I want.
+	svgwrite
+		Still being updated and maintaned. 
+JS:
+	Snap.svg
+		Written by OG JS SVG library author. Made for modern browsers, uses fancy SVG stuff. Can read inkscape, illustrator, etc. files. Supports animation. Object oriented in the way I want.
+		Cons: Hasn't been updated since 2017
+	paperjs
+		Actively maintained
+	D3
