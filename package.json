@@ -15,6 +15,7 @@
   "author": "Michael Fishman",
   "license": "MIT",
   "dependencies": {
+    "jquery": "^3.4.1",
     "paper": "^0.12.3"
   }
 }

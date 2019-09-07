@@ -2,30 +2,36 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Animated Star</title>
-    <link rel="stylesheet" href="C:\Users\Brolly\Documents\mandala_generator\node_modules\paper\examples\css">
+    <title>Flower</title>
+    <link rel="stylesheet" href="./style.css">
     <script type="text/javascript" src="./node_modules/paper/dist/paper-full.js"></script>
-    <script type="text/paperscript" canvas="canvas">
+    <script type="text/javascript" canvas="canvas" src="./mandala_utils.js"></script>
+    
+    <script type="text/javascript">
+    console.log("1");
+    paper.install(window);
+    window.onload = function() {
+        paper.setup('canvas');
+        console.log('2')
+        console.log(view.center);
         var layer = project.activeLayer;
+        var pieces_layer = new Layer({
+            // visible: false
+        });
+        layer.activate();
+    	// of the view and a radius of 30:
+        simple_circle_flower_example();
+        load_pieces(layer);
+        var c2 = new Path.Circle({
+            center: view.center,
+            radius: 50,
+            strokeColor: 'red',
+            strokeWidth: 5
+        });
 
-	// of the view and a radius of 30:
-	var path = new Path.Circle({
-		center: view.center,
-		radius: 30,
-		strokeColor: 'black'
-	});
-
-        // function onFrame(event) {
-        //     for (var i = 0; i < values.count; i++) {
-        //         var item = layer.children[i];
-        //         var angle = (values.count - i) * Math.sin(event.count / 128) / 10;
-        //         item.rotate(angle);
-        //     }
-        // }
-
-        // Reposition the paths whenever the window is resized:
-        function onResize(event) {
-            layer.position = view.center;
+            function onResize(event) {
+                layer.position = view.center;
+            }
         }
     </script>
 </head>
