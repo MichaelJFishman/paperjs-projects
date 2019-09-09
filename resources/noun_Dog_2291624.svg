@@ -1,0 +1,12 @@
+<svg clip-rule="evenodd" fill-rule="evenodd" style="shape-rendering:geometricPrecision;text-rendering:geometricPrecision;image-rendering:optimizeQuality;" version="1.1" viewBox="0 0 217 312.5" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
+	<defs>
+		<style type="text/css">.fil0 {fill:black}
+   
+  </style>
+	</defs>
+	<g>
+		<path class="fil0" d="M155 69l44 83 -41 34 1 17 -25 31 -51 0 -24 -31 0 -17 -40 -34 43 -83 93 0zm-97 -16l-14 -23 -10 18 3 35 16 -30 5 0zm-36 58l-6 -64 25 -47 35 53 65 0 36 -53 25 47 -7 64 22 43 -44 38 1 17 -32 41c-22,0 -44,0 -66,0l-33 -41 2 -17 -45 -38 22 -43zm137 -58l15 -23 10 18 -4 35 -15 -30 -6 0z"/>
+		<path class="fil0" d="M163 101l-27 28 4 73 -31 16 -34 -16 6 -73 -27 -28 109 0zm-71 93l7 -77 19 0c3,26 5,51 7,77l-16 8 -17 -8z"/>
+		<polygon class="fil0" points="109,198 122,175 96,175 "/>
+	</g>
+</svg>

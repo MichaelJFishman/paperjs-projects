@@ -1,1 +1,4 @@
 the imported items are blocked by a plane starting around x=200. What is it?
+items created in the html file work fine, as do items in the simple_flower function
+I don't think it's a layer issue, I've tried using the main layer
+What is the difference between imported and created paths?

@@ -35,25 +35,25 @@ function simple_circle_flower_example(){
     first_leaf.position.y = center_circle.position.y/2
     var leaves = reflect_and_rotate(first_leaf, center_circle.position, 6)
 }
-
-function load_pieces(layer=project.activeLayer){
-    pieces_url = "http://127.0.0.1:8080/pieces.svg";
-    // pieces_url = "./resources/pieces.svg";
-    layer.importSVG(pieces_url,
+function load_svg_file(file_path,layer=project.activeLayer){
+    local_url = "http://127.0.0.1:8080/";
+    url = local_url + file_path;
+        // pieces_url = "./resources/pieces.svg";
+    layer.importSVG(url,
         {
             exppandShapes: true,
             onLoad: function(item){
-                console.log("imported svg");
+                console.log("imported " + file_path);
                 console.log(view.center);
                 var paths = item.getItems({
                     class: Path
                 });
                 for (var i = 0; i < paths.length; i++){
                     var p = paths[i];
-                    p.strokeColor = 'red';
+                    // p.strokeColor = 'red';
                     // p.strokeWidth = 3;
-                    p.scale(5);
-                    p.position = new Point(200,200);
+                    // p.scale(1);
+                    // p.position = new Point(200,200);
                     // p.position.x = 100;
                     // p.position.y = 100;
                     // p.position.x = 250;
@@ -62,6 +62,11 @@ function load_pieces(layer=project.activeLayer){
                 // item.scale(5);
             }
         });
-    console.log(layer.children);
+
+}
+
+function load_pieces(layer=project.activeLayer){
+    load_svg_file("pieces.svg", layer)
+    // console.log(layer.children);
     // console.log(pieces);
 }
