@@ -35,10 +35,13 @@ function simple_circle_flower_example(){
     first_leaf.position.y = center_circle.position.y/2
     var leaves = reflect_and_rotate(first_leaf, center_circle.position, 6)
 }
-function load_svg_file(file_path,layer=project.activeLayer){
-    local_url = "http://127.0.0.1:8080/";
+function load_svg_file(file_path,layer=null, path_list = []){
+    local_url = "http://localhost:8000/";
     url = local_url + file_path;
-        // pieces_url = "./resources/pieces.svg";
+    activeLayer = project.activeLayer
+    if(layer == null){
+        layer = new Layer({visible : false})
+    }
     layer.importSVG(url,
         {
             exppandShapes: true,
@@ -50,23 +53,26 @@ function load_svg_file(file_path,layer=project.activeLayer){
                 });
                 for (var i = 0; i < paths.length; i++){
                     var p = paths[i];
-                    // p.strokeColor = 'red';
-                    // p.strokeWidth = 3;
-                    // p.scale(1);
-                    // p.position = new Point(200,200);
-                    // p.position.x = 100;
-                    // p.position.y = 100;
-                    // p.position.x = 250;
-                    // p.position.y = 250;
+                    path_list.push(p)
                 }
-                // item.scale(5);
             }
         });
-
+    if(activeLayer != layer){
+        layer.remove()
+        activeLayer.activate()
+    }
 }
 
-function load_pieces(layer=project.activeLayer){
-    load_svg_file("pieces.svg", layer)
-    // console.log(layer.children);
-    // console.log(pieces);
+function load_pieces(file_path, layer=null){
+    var pieces = [];
+    load_svg_file(file_path, null, pieces);
+
+    if(layer != null){
+        console.log("Adding pieces to layer");
+        function add_to_layer(item, index){
+            layer.addChild(item);
+        }
+        pieces.forEach(add_to_layer);
+    }
+    return pieces
 }

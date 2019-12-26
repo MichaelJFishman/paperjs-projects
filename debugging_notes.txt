@@ -2,3 +2,14 @@ the imported items are blocked by a plane starting around x=200. What is it?
 items created in the html file work fine, as do items in the simple_flower function
 I don't think it's a layer issue, I've tried using the main layer
 What is the difference between imported and created paths?
+
+It looks like the imported items are contained in a group item that is clipped. Moving the group item moves them all
+The group has 2 children. Moving either child moves the whole group
+Moving the group's position moves each of the children's position. The positions are offset by 0 and ~5.2
+
+svg8 (name of imported svg)
+	clipmask?
+	layer1
+		leaf1
+		tearpetal
+		fan

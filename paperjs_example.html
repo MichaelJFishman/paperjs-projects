@@ -15,20 +15,7 @@
         console.log('2')
         console.log(view.center);
         var layer = project.activeLayer;
-        // var pieces_layer = new Layer({
-        //     // visible: false
-        // });
-        // layer.activate();
-    	// of the view and a radius of 30:
-        // simple_circle_flower_example();
-        // load_pieces(layer);
-        load_svg_file("noun_Dog_2291624.svg")
-        // var c2 = new Path.Circle({
-        //     center: new Point(250,250),
-        //     radius: 50,
-        //     strokeColor: 'red',
-        //     strokeWidth: 5
-        // });
+        pieces = load_pieces("resources/pieces.svg", layer);
 
             function onResize(event) {
                 layer.position = view.center;
