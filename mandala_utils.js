@@ -35,14 +35,15 @@ function simple_circle_flower_example(){
     first_leaf.position.y = center_circle.position.y/2
     var leaves = reflect_and_rotate(first_leaf, center_circle.position, 6)
 }
-function load_svg_file(file_path,layer=null, path_list = []){
+
+function load_paths(file_path, targetLayer=null){
+    var path_list = [];
     local_url = "http://localhost:8000/";
     url = local_url + file_path;
     activeLayer = project.activeLayer
-    if(layer == null){
-        layer = new Layer({visible : false})
-    }
-    layer.importSVG(url,
+    tempLayer = new Layer({visible : false})
+
+    tempLayer.importSVG(url,
         {
             exppandShapes: true,
             onLoad: function(item){
@@ -54,25 +55,16 @@ function load_svg_file(file_path,layer=null, path_list = []){
                 for (var i = 0; i < paths.length; i++){
                     var p = paths[i];
                     path_list.push(p)
+                    if (targetLayer != null){
+                        targetLayer.addChild(p)
+                    }
                 }
             }
         });
-    if(activeLayer != layer){
-        layer.remove()
-        activeLayer.activate()
-    }
-}
 
-function load_pieces(file_path, layer=null){
-    var pieces = [];
-    load_svg_file(file_path, null, pieces);
+    tempLayer.remove()
+    activeLayer.activate()
 
-    if(layer != null){
-        console.log("Adding pieces to layer");
-        function add_to_layer(item, index){
-            layer.addChild(item);
-        }
-        pieces.forEach(add_to_layer);
-    }
-    return pieces
+    return path_list
+    
 }
