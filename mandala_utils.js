@@ -46,40 +46,36 @@ function make_flower(layer = project.activeLayer){
             strokeWidth: 1,
             name: "center_circle"
         });
-        // var petal_0 = pieces[0].clone({insert: false});
-        var petal_prototype = pieces[0];
-        // var petal_0_base = center_circle.bounds.topCenter;
-        // set_base_point_position(petal_0, petal_0_base);
-        // petal_0.pivot = petal_0_base;
-        // console.log(petal_0);
-        // layer.addChild(petal_0);
-        var num_petals = 3;
-        var angle = 360 / num_petals;
-        console.log("Angle: " + angle)
-        var i = 0;
-        for(i = 0; i < num_petals; i++){
-            var petal = petal_prototype.clone({insert : false});
-            petal.applyMatrix = true;
-            petal.name = "petal_" + i;
-            set_base_point_position(petal,center_circle.bounds.topCenter);
-            console.log(i);
-            petal.pivot = center_circle.position;
-            // set_pivot(petal, center_circle.position);
-            // set_pivot_to_base(petal);
-            console.log(petal);
-            petal.rotate(angle * (i));
-            // petal.position.x += 20 * i;
-            layer.addChild(petal);
-        }
-
+        distribute_radially_symmetric(pieces[0], center_circle.position, 30, 3, 0, layer);
+        distribute_radially_symmetric(pieces[1], center_circle.position, 30, 3, 60, layer);
     }
     var pieces = load_paths("resources/pieces.svg", null, _make_flower);
-
-
-
-
+}
+function deg2rad(deg){
+    return deg * (Math.PI / 180);
 }
 
+function rad2deg(rad){
+    return rad * (180 / Math.PI);
+}
+
+function distribute_radially_symmetric(path, center, offset, num_copies, start_angle=0, layer=project.activeLayer){
+    path.strokeWidth = 1;
+    path.applyMatrix = true;
+    var angle_inc = 360 / num_copies;
+    new_paths = [];
+    var i;
+    for(i = 0; i < num_copies; i++){
+        new_path = path.clone({insert : false});
+        start_point = new Point(center.x, center.y - offset);
+        set_base_point_position(new_path, start_point);
+        new_path.pivot = center;
+        new_path.rotate(start_angle + i*angle_inc);
+        new_paths.push(new_path);
+        layer.addChild(new_path);
+    }
+    return new_paths;
+}
 function get_base_point(path){
     // The point of the first segment is usually not the base point we want.
     // Assume for now that the item is vertical, and the bottom point is the base point
@@ -96,9 +92,6 @@ function set_base_point_position(path, point){
     path.position = adjusted_point;
 }
 
-function set_pivot(path, global_point){
-    path.pivot = global_point.subtract(path.position);
-}
 
 
 function load_paths(file_path, targetLayer=null, _callback = null){
