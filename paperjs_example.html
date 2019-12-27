@@ -12,15 +12,22 @@
     paper.install(window);
     window.onload = function() {
         paper.setup('canvas');
-        console.log('2')
+        // console.log('2')
         console.log(view.center);
         var layer = project.activeLayer;
-        pieces = load_paths("resources/pieces.svg", layer);
 
-            function onResize(event) {
-                layer.position = view.center;
-            }
+        make_flower(layer);
+        // layer.activate();
+        // pieces = load_paths("resources/pieces.svg");
+        // console.log((pieces));
+        // layer.addChild(pieces[0]);
+        // load_paths_test();
+
+        function onResize(event) {
+            layer.position = view.center;
         }
+    }
+
     </script>
 </head>
 <body>
