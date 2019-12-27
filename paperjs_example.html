@@ -15,7 +15,7 @@
         console.log('2')
         console.log(view.center);
         var layer = project.activeLayer;
-        pieces = load_paths("resources/pieces.svg");
+        pieces = load_paths("resources/pieces.svg", layer);
 
             function onResize(event) {
                 layer.position = view.center;

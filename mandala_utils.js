@@ -36,6 +36,19 @@ function simple_circle_flower_example(){
     var leaves = reflect_and_rotate(first_leaf, center_circle.position, 6)
 }
 
+function get_base_point(path){
+    // The point of the first segment is usually not the base point we want.
+    // Assume for now that the item is vertical, and the bottom point is the base point
+    return path.bounds.bottomCenter
+}
+
+
+
+function set_base_point_position(path, point){
+    var adjusted_point = new Point(point.x, point.y - path.bounds.height/2);
+    path.position = adjusted_point
+}
+
 function load_paths(file_path, targetLayer=null){
     var path_list = [];
     local_url = "http://localhost:8000/";
