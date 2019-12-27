@@ -47,23 +47,28 @@ function make_flower(layer = project.activeLayer){
             name: "center_circle"
         });
         // var petal_0 = pieces[0].clone({insert: false});
-        var petal_0 = pieces[0].clone({insert : false});
-        var petal_0_base = center_circle.bounds.topCenter;
-        set_base_point_position(petal_0, petal_0_base);
-        petal_0.pivot = petal_0_base;
-        console.log(petal_0);
-        layer.addChild(petal_0);
+        var petal_prototype = pieces[0];
+        // var petal_0_base = center_circle.bounds.topCenter;
+        // set_base_point_position(petal_0, petal_0_base);
+        // petal_0.pivot = petal_0_base;
+        // console.log(petal_0);
+        // layer.addChild(petal_0);
         var num_petals = 3;
         var angle = 360 / num_petals;
-        var i = 1;
-        for(i = 1; i < num_petals; i++){
-            petal = petal_0.clone({insert : false});
-
+        console.log("Angle: " + angle)
+        var i = 0;
+        for(i = 0; i < num_petals; i++){
+            var petal = petal_prototype.clone({insert : false});
+            petal.applyMatrix = true;
+            petal.name = "petal_" + i;
+            set_base_point_position(petal,center_circle.bounds.topCenter);
+            console.log(i);
             petal.pivot = center_circle.position;
-            // petal.position.x += 50 * i
-            console.log(i)
+            // set_pivot(petal, center_circle.position);
+            // set_pivot_to_base(petal);
             console.log(petal);
-            // petal.rotate(angle);
+            petal.rotate(angle * (i));
+            // petal.position.x += 20 * i;
             layer.addChild(petal);
         }
 
@@ -89,6 +94,10 @@ function set_base_point_position(path, point){
     var adjustment_vector = new Point(path.position.x - base_point.x, path.position.y - base_point.y);
     var adjusted_point = new Point(point.x + adjustment_vector.x, point.y + adjustment_vector.y);
     path.position = adjusted_point;
+}
+
+function set_pivot(path, global_point){
+    path.pivot = global_point.subtract(path.position);
 }
 
 
