@@ -1,2 +1,0 @@
-Convert icons to svg to use as primitive components in mandalas
-Take colors from images
