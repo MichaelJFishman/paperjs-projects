@@ -21,6 +21,38 @@ function reflect_and_rotate(item, center_of_rotation, num_clones){
     }
     return item_list;
 }
+function generate_piece(handle_limit = 50){
+    //The handles are changing the endpoints. How can I prevent this?
+    // var path = new Path({
+    //     strokeColor: 'black'
+    // });
+    // var points = [new Point(30, 50), new Point(170, 50)];
+    // path.addSegments(points);
+    // return path;
+    var left_half = new Path({
+        strokeColor : 'black'
+    });
+    anchors = [new Point(100,200), new Point(50,150), new Point(100,100)];
+    segments = [];
+    var i;
+    for(i = 0; i < 3; i++){
+        // handle_0 = new Point(Math.random() * handle_limit - handle_limit/2, Math.random() * handle_limit - handle_limit/2);
+        // handle_1 = new Point(Math.random() * handle_limit - handle_limit/2, Math.random() * handle_limit - handle_limit/2);
+        handle_0 = new Point(Math.random() * handle_limit, Math.random() * handle_limit);
+        handle_1 = new Point(Math.random() * handle_limit, Math.random() * handle_limit);
+        segments.push(new Segment(anchors[i], handle_0, handle_1))
+    }
+    left_half.addSegments(segments);
+    left_half.applyMatrix = true;
+    left_half.pivot = left_half.bounds.rightCenter;
+    console.log("In generate")
+    // reflection_matrix = new Matrix([-1,0,0,1,0,0]); //This does NOT work. Sends the x position to -100
+
+    var right_half = left_half.clone({insert : true});
+    right_half.scale(-1,1);
+    // left_half.join(right_half);
+    return left_half;
+}
 
 function simple_circle_flower_example(){
     var center_circle = new Path.Circle({
@@ -35,7 +67,18 @@ function simple_circle_flower_example(){
     first_leaf.position.y = center_circle.position.y/2
     var leaves = reflect_and_rotate(first_leaf, center_circle.position, 6)
 }
-
+function put_circle(center){
+    var circle = new Path.Circle({
+        center : center,
+        radius : 5,
+        strokeColor: 'black',
+        strokeWidth: 1,
+        name: "center_circle"
+    });
+}
+function sample_from_array(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
+}
 function make_flower(layer = project.activeLayer){
     // All the children of later have a bunch of undefined properties. Why?
     _make_flower = function(pieces){
@@ -70,6 +113,7 @@ function distribute_radially_symmetric(path, center, offset, num_copies, start_a
         start_point = new Point(center.x, center.y - offset);
         set_base_point_position(new_path, start_point);
         new_path.pivot = center;
+        // console.log(new_path.pivot);
         new_path.rotate(start_angle + i*angle_inc);
         new_paths.push(new_path);
         layer.addChild(new_path);

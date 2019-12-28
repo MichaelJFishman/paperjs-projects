@@ -1,1 +1,2 @@
 To get syntax highlighting for paperscript in html files: https://forum.sublimetext.com/t/seeing-colored-js-inside-html-script-tag/33002/32
+To run server, enter command:python -m http.server
