@@ -7,6 +7,7 @@
 // }
 
 // dynamicallyLoadScript()
+var art_folder = "C:/Users/Brolly/Pictures/Art/"
 
 function reflect_and_rotate(item, center_of_rotation, num_clones){
     /**
@@ -137,7 +138,7 @@ function set_base_point_position(path, point){
 }
 
 
-
+// TODO change to return output of callback. Make callback mandatory second arg.
 function load_paths(file_path, targetLayer=null, _callback = null){
     var path_list = [];
     local_url = "http://localhost:8000/";
@@ -176,6 +177,32 @@ function load_paths(file_path, targetLayer=null, _callback = null){
     
 }
 
+
+
+function get_reflection(path, axis, clone = true){
+    if(clone){
+        path = path.clone();
+    }
+    // MAtrix should be {{cos p, -sin p},{sin p, cos p}} * {{1,0},{0,-1}} * {{cos -p, -sin -p},{sin -p, cos -p}}, where p is the angle of the axis. 
+    // Condensed version of this matrix was taken from wolfram alpha
+    /*
+    (cos^2(p) - sin^2(p) | 2 cos(p) sin(p)
+    2 cos(p) sin(p) | sin^2(p) - cos^2(p))
+    */
+    // Translate path to align with axis
+    // http://paperjs.org/reference/matrix/
+    // TODO move path or axis so that they align correctly?
+    // Get angle of axis
+    let theta = Math.atan(axis[1] / axis[0]);
+    // This is one ugly line
+    let matrix = new Matrix(Math.pow(Math.cos(theta),2) - Math.pow(Math.sin(theta),2), 2 * Math.cos(theta) * Math.sin(theta), 2*Math.cos(theta) * Math.sin(theta), Math.pow(Math.sin(theta),2) - Math.pow(Math.cos(theta),2), 0, 0);
+    let position = [path.position.x, path.position.y];
+    path.transform(matrix);
+    path.setPosition(position[0], position[1]);
+    return path;
+
+}
+
 function load_paths_test(){
     layer = project.activeLayer;
     _callback = function(path_list){
@@ -185,4 +212,60 @@ function load_paths_test(){
     var pieces = load_paths("resources/pieces.svg", null, _callback);
     // console.log(pieces);
     // project.activeLayer.addChild(pieces[0]);
+    return pieces;
+}
+
+// function get_axis_of_symmetry_test(){
+//     var 
+
+// }
+// WHY ISN"T THIS GETTING CALLED
+function get_axis_of_symmetry(path, _callback = null){
+    // Get list of all nodes, and points halfway between nodes by arclength
+    let draw_axis = true;
+    console.log("Looking for axis")
+
+    var points = [];
+    path.curves.forEach(function(c){
+        point1 = c.point1;
+        let circle_1 = new Path.Circle(point1, 5);
+        circle_1.strokeColor = "red";
+        points.push(point1);
+        mid_point = c.getLocationAtTime(0.5).point;
+        let circle_2 = new Path.Circle(mid_point, 5); 
+        circle_2.strokeColor = "blue";
+        points.push(mid_point);
+    });
+    // For each pair of opposite points, check whether reflecting the path across their connecting segment preserves the path.
+    let axis = null;
+    points.some(function(p){
+        let offset = path.getOffsetOf(p);
+        let offset2 = offset + path.length / 2;
+        if(offset2 > path.length){
+            offset2 = offset2 - path.length;
+        }
+        let p2 = path.getPointAt(offset2);
+        let test_axis = [p,p2];
+        test_axis_line = new Path.Line(test_axis[0], test_axis[1]);
+        test_axis_line.strokeColor = "black";
+        // copy path and reflect it along axis
+        let mirror_path = get_reflection(path, test_axis, true);
+        if(path.compare(mirror_path)){
+            axis = test_axis;
+            return true;
+        }
+
+    });
+    if(axis != null){
+        console.log("Found axis");
+        if(draw_axis){
+            var axis_line = new Path.Line(axis[0], axis[1]);
+            axis_line.strokeColor = "black";
+        }
+        return axis;   
+    }
+    else {
+        console.log("Did not find an axis");
+    }
+    return null;
 }

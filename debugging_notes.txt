@@ -1,4 +1,8 @@
+I added get_axis_of_symmetry() to mandala_utils.js.
+When I call it in a callback to load_pieces, it does not execute as evidenced by the lack of print statements.
+When I call it in the html outside 
 
+ITS USING A CACHED VERSION OF MANDALA_IYLSDFSDlkn;f asdkn;l
 ~~OLD~~
 the imported items are blocked by a plane starting around x=200. What is it?
 items created in the html file work fine, as do items in the simple_flower function

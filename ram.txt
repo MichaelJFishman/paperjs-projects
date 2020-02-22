@@ -1,0 +1,6 @@
+TODO:
+Generalize imports to groups.
+Make functions for generating multi-part groups. Parameters for color (style) of each part.
+Figure out handles. What patterns of handles on a path lead to what behavior? Create parameterized families.
+
+I want to be able to create an item in inkscape (usually a group), import it into paperjs, and move it around/change it's colors programatically. Ideally the function to create a new one would tell me how many colors/styles it can accept. Superideally it would be even more structures in the sense of primary-colors and highlights.

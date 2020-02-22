@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Flower</title>
+    <link rel="stylesheet" href="./style.css">
+    <script type="text/javascript" src="./node_modules/paper/dist/paper-full.js"></script>
+    <script type="text/javascript" canvas="canvas" src="./mandala_utils.js"></script>
+    
+    <script type="text/javascript">
+    console.log("1");
+    paper.install(window);
+    window.onload = function() {
+        paper.setup('canvas');
+        console.log(view.center);
+        var layer = project.activeLayer;
+
+        function dumbass_function(){
+            console.log("Fuck");
+        }
+
+
+        let _callback = function(path_list){
+            console.log("In load_paths callback");
+            let path = path_list[0];
+            console.log(path);
+            dumbass_function();
+            get_axis_of_symmetry(path);
+            console.log("After call to get_axis_of_symmetry")
+            // console.log(axis);
+        };
+        var pieces = load_paths("resources/pieces.svg", layer, _callback);
+        // get_axis_of_symmetry();
+        // make_flower(layer);
+        // foo()
+        // pie = generate_piece();
+        // pieces = load_paths("resources/pieces.svg")
+        // console.log(pieces);
+        // project.activeLayer.addChild(pie);
+
+        function onResize(event) {
+            layer.position = view.center;
+        }
+    }
+
+    </script>
+</head>
+<body>
+    <canvas id="canvas" resize stats hidpi="off"></canvas>
+</body>
+</html>

@@ -1,0 +1,7 @@
+2.15.2020
+7:24 am
+How to find bilateral symmetry: consider all (or half) of the vertices and points halway along paths between adjacent vertices (verbose). The axis of symmetry must be between a pair of such points. 
+	How to test that candidate axis is indeed axis: 
+		Copy item and reflect across axis. Check that it is identical by one of:
+			path definitions (probs not unique, may be mirrored?)
+			overlapping area being equal to area of each (makes it easy to find approximate symmetry by adding error tolerance)
