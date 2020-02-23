@@ -218,12 +218,8 @@ function load_paths_test(){
     return pieces;
 }
 
-// function get_axis_of_symmetry_test(){
-//     var 
-
-// }
-// WHY ISN"T THIS GETTING CALLED
-function get_axis_of_symmetry(path, _callback = null){
+// TODO have it check for multiple axes, and either pick the longest or return all
+function get_axes_of_symmetry(path, _callback = null){
     // Get list of all nodes, and points halfway between nodes by arclength
     let draw_axis = true;
     base_area = path.area;
@@ -239,8 +235,8 @@ function get_axis_of_symmetry(path, _callback = null){
     // For each pair of opposite points, check whether reflecting the path across their connecting segment preserves the path.
     let colors = ["red", "blue", "green", "purple", "orange", "black"];
     let color_id = 0;
-    let axis = null;
-    points.some(function(p){
+    let axes_of_symmetry = [];
+    points.forEach(function(p){
         let offset = path.getOffsetOf(p);
         let offset2 = offset + path.length / 2;
         if(offset2 > path.length){
@@ -248,10 +244,10 @@ function get_axis_of_symmetry(path, _callback = null){
         }
         let p2 = path.getPointAt(offset2);
         let c = colors[color_id];
-        let circle_1 = new Path.Circle(p, 5);
-        circle_1.strokeColor = c;
-        let circle_2 = new Path.Circle(p2, 5); 
-        circle_2.strokeColor = c;
+        // let circle_1 = new Path.Circle(p, 5);
+        // circle_1.strokeColor = c;
+        // let circle_2 = new Path.Circle(p2, 5); 
+        // circle_2.strokeColor = c;
         let test_axis = [p,p2];
         // test_axis_line = new Path.Line(test_axis[0], test_axis[1]);
         // test_axis_line.strokeColor = "black";
@@ -263,22 +259,20 @@ function get_axis_of_symmetry(path, _callback = null){
         // console.log(c + ": " + intersection_relative_area);
         mirror_path.remove(); 
         if(intersection_relative_area > 0.9){
-            axis = test_axis;
-            return true;
+            axes_of_symmetry.push(test_axis)
         }
         color_id += 1;
 
     });
-    if(axis != null){
-        console.log("Found axis");
+    if(axes_of_symmetry.length > 0){
+        console.log("Found axis"    );
         if(draw_axis){
-            var axis_line = new Path.Line(axis[0], axis[1]);
-            axis_line.strokeColor = colors[color_id];
+            axes_of_symmetry.forEach(function(axis){
+                axis_line = new Path.Line(axis[0], axis[1]);
+                axis_line.strokeColor = "black";
+            });
         }
-        return axis;   
     }
-    else {
-        console.log("Did not find an axis");
-    }
-    return null;
+    return axes_of_symmetry;   
+
 }
