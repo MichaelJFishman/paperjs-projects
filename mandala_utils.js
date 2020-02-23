@@ -193,7 +193,10 @@ function get_reflection(path, axis, clone = true){
     // http://paperjs.org/reference/matrix/
     // TODO move path or axis so that they align correctly?
     // Get angle of axis
-    let theta = Math.atan(axis[1] / axis[0]);
+    let [p0, p1] = axis;
+    const dx = p1.x - p0.x;
+    const dy = p1.y - p0.y; 
+    let theta = Math.atan(dy / dx);
     // This is one ugly line
     let matrix = new Matrix(Math.pow(Math.cos(theta),2) - Math.pow(Math.sin(theta),2), 2 * Math.cos(theta) * Math.sin(theta), 2*Math.cos(theta) * Math.sin(theta), Math.pow(Math.sin(theta),2) - Math.pow(Math.cos(theta),2), 0, 0);
     let position = [path.position.x, path.position.y];
@@ -223,20 +226,19 @@ function load_paths_test(){
 function get_axis_of_symmetry(path, _callback = null){
     // Get list of all nodes, and points halfway between nodes by arclength
     let draw_axis = true;
-    console.log("Looking for axis")
+    base_area = path.area;
 
     var points = [];
     path.curves.forEach(function(c){
         point1 = c.point1;
-        let circle_1 = new Path.Circle(point1, 5);
-        circle_1.strokeColor = "red";
         points.push(point1);
         mid_point = c.getLocationAtTime(0.5).point;
-        let circle_2 = new Path.Circle(mid_point, 5); 
-        circle_2.strokeColor = "blue";
+
         points.push(mid_point);
     });
     // For each pair of opposite points, check whether reflecting the path across their connecting segment preserves the path.
+    let colors = ["red", "blue", "green", "purple", "orange", "black"];
+    let color_id = 0;
     let axis = null;
     points.some(function(p){
         let offset = path.getOffsetOf(p);
@@ -245,22 +247,33 @@ function get_axis_of_symmetry(path, _callback = null){
             offset2 = offset2 - path.length;
         }
         let p2 = path.getPointAt(offset2);
+        let c = colors[color_id];
+        let circle_1 = new Path.Circle(p, 5);
+        circle_1.strokeColor = c;
+        let circle_2 = new Path.Circle(p2, 5); 
+        circle_2.strokeColor = c;
         let test_axis = [p,p2];
-        test_axis_line = new Path.Line(test_axis[0], test_axis[1]);
-        test_axis_line.strokeColor = "black";
+        // test_axis_line = new Path.Line(test_axis[0], test_axis[1]);
+        // test_axis_line.strokeColor = "black";
         // copy path and reflect it along axis
         let mirror_path = get_reflection(path, test_axis, true);
-        if(path.compare(mirror_path)){
+        mirror_path.strokeColor = c;
+        let intersection = path.intersect(mirror_path, {insert:false});
+        intersection_relative_area = Math.abs(intersection.area / base_area);
+        // console.log(c + ": " + intersection_relative_area);
+        mirror_path.remove(); 
+        if(intersection_relative_area > 0.9){
             axis = test_axis;
             return true;
         }
+        color_id += 1;
 
     });
     if(axis != null){
         console.log("Found axis");
         if(draw_axis){
             var axis_line = new Path.Line(axis[0], axis[1]);
-            axis_line.strokeColor = "black";
+            axis_line.strokeColor = colors[color_id];
         }
         return axis;   
     }
