@@ -178,6 +178,21 @@ function load_paths(file_path, targetLayer=null, _callback = null){
 }
 
 
+function points2angle(p0, p1, unit = "Degrees"){
+    const dx = p1.x - p0.x;
+    const dy = p1.y - p0.y; 
+    let theta =  Math.atan(dy / dx);
+    if(unit == "Radians"){
+        theta == theta;
+    }
+    else if(unit == "Degrees"){
+        theta *= 180/Math.PI;
+    }
+    else{
+        throw "Invalid angle unit: " + unit;
+    }
+    return theta;
+}
 
 function get_reflection(path, axis, clone = true){
     if(clone){
@@ -193,10 +208,11 @@ function get_reflection(path, axis, clone = true){
     // http://paperjs.org/reference/matrix/
     // TODO move path or axis so that they align correctly?
     // Get angle of axis
-    let [p0, p1] = axis;
-    const dx = p1.x - p0.x;
-    const dy = p1.y - p0.y; 
-    let theta = Math.atan(dy / dx);
+    // let [p0, p1] = axis;
+    // const dx = p1.x - p0.x;
+    // const dy = p1.y - p0.y; 
+    // let theta = Math.atan(dy / dx);
+    let theta = points2angle(axis[0], axis[1], unit = "Radians");
     // This is one ugly line
     let matrix = new Matrix(Math.pow(Math.cos(theta),2) - Math.pow(Math.sin(theta),2), 2 * Math.cos(theta) * Math.sin(theta), 2*Math.cos(theta) * Math.sin(theta), Math.pow(Math.sin(theta),2) - Math.pow(Math.cos(theta),2), 0, 0);
     let position = [path.position.x, path.position.y];
@@ -275,4 +291,20 @@ function get_axes_of_symmetry(path, _callback = null){
     }
     return axes_of_symmetry;   
 
+}
+
+// Set angle 0 to mean right?
+function set_path_angle(path, angle = 0, axis = null, clone = true){
+    // When angle is 0, path's axis of symmetry is straight up.
+    if(axis === null){
+        axis = get_axes_of_symmetry(path)[0];
+    }
+    angle -= 90;
+    const current_angle = points2angle(axis[0], axis[1], "Degrees");
+    let dangle = angle - current_angle;
+    if(clone){
+        path = path.clone();
+    }
+    path.rotate(dangle);
+    return path;
 }
