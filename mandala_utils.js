@@ -103,7 +103,12 @@ function rad2deg(rad){
     return rad * (180 / Math.PI);
 }
 
-function distribute_radially_symmetric(path, center, offset, num_copies, start_angle=0, layer=project.activeLayer){
+function distribute_radially_symmetric(path, center, offset, num_copies, start_angle=0, layer=project.activeLayer, axis=null){
+    if(axis === null){
+        axis = get_axes_of_symmetry(path)[0];
+    }
+    path = set_path_angle(path, 0, axis, true);
+
     path.strokeWidth = 1;
     path.applyMatrix = true;
     var angle_inc = 360 / num_copies;
@@ -135,6 +140,7 @@ function set_base_point_position(path, point){
     var adjustment_vector = new Point(path.position.x - base_point.x, path.position.y - base_point.y);
     var adjusted_point = new Point(point.x + adjustment_vector.x, point.y + adjustment_vector.y);
     path.position = adjusted_point;
+    return path;
 }
 
 
@@ -234,10 +240,10 @@ function load_paths_test(){
     return pieces;
 }
 
-// TODO have it check for multiple axes, and either pick the longest or return all
+//
 function get_axes_of_symmetry(path, _callback = null){
     // Get list of all nodes, and points halfway between nodes by arclength
-    let draw_axis = true;
+    let draw_axis = false;
     base_area = path.area;
 
     var points = [];
@@ -260,14 +266,7 @@ function get_axes_of_symmetry(path, _callback = null){
         }
         let p2 = path.getPointAt(offset2);
         let c = colors[color_id];
-        // let circle_1 = new Path.Circle(p, 5);
-        // circle_1.strokeColor = c;
-        // let circle_2 = new Path.Circle(p2, 5); 
-        // circle_2.strokeColor = c;
         let test_axis = [p,p2];
-        // test_axis_line = new Path.Line(test_axis[0], test_axis[1]);
-        // test_axis_line.strokeColor = "black";
-        // copy path and reflect it along axis
         let mirror_path = get_reflection(path, test_axis, true);
         mirror_path.strokeColor = c;
         let intersection = path.intersect(mirror_path, {insert:false});
@@ -281,7 +280,7 @@ function get_axes_of_symmetry(path, _callback = null){
 
     });
     if(axes_of_symmetry.length > 0){
-        console.log("Found axis"    );
+        console.log("Found axis");
         if(draw_axis){
             axes_of_symmetry.forEach(function(axis){
                 axis_line = new Path.Line(axis[0], axis[1]);
@@ -293,7 +292,7 @@ function get_axes_of_symmetry(path, _callback = null){
 
 }
 
-// Set angle 0 to mean right?
+// Note that this may end up setting the path to be upside down. Maybe I should just train a nn. Creating the training data should be easy.
 function set_path_angle(path, angle = 0, axis = null, clone = true){
     // When angle is 0, path's axis of symmetry is straight up.
     if(axis === null){

@@ -1,0 +1,5 @@
+***Orientation***
+I can get axes of symmetry, but cannot detect top from bottom. May be easier and better with nn than heuristic
+***Spacing***
+How can I make sure spaces between objects are appropriate?
+One technique would be to find a concave hull, then find local minima or radius. I could also use width of bounding boxes, but I want items to infringe on bounding rectangles

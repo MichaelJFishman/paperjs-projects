@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Flower</title>
+    <link rel="stylesheet" href="./style.css">
+    <script type="text/javascript" src="./node_modules/paper/dist/paper-full.js"></script>
+    <script type="text/javascript" canvas="canvas" src="./mandala_utils.js"></script>
+    
+    <script type="text/javascript">
+    console.log("1");
+    paper.install(window);
+    window.onload = function() {
+        paper.setup('canvas');
+        console.log(view.center);
+        var layer = project.activeLayer;
+        var pieces_layer = new Layer();
+        pieces_layer.visible = false;
+
+        let _callback = function(path_list){
+            path_list.forEach(function(path){
+                // let axes = get_axes_of_symmetry(path);
+                set_path_angle(path,0,null,false);
+            })
+            layer.activate();
+            let center = new Point(300,300);
+            let radius = 50;
+            let gap_ratio = 1.1;
+            center_circle = new Path.Circle(center, radius);
+            // layer.addChild(center_circle);
+            center_circle.strokeColor = "black";
+            distribute_radially_symmetric(path_list[0], center, radius * gap_ratio, 3);
+            distribute_radially_symmetric(path_list[1], center, radius * gap_ratio,3, 60);
+            distribute_radially_symmetric(path_list[2], center, (radius + path_list[0].internalBounds.height), 6, 30)
+
+   
+            // console.log(axis);
+        };
+        var pieces = load_paths("resources/findable_symmetries.svg", pieces_layer, _callback);
+        // get_axis_of_symmetry();
+        // make_flower(layer);
+        // foo()
+        // pie = generate_piece();
+        // pieces = load_paths("resources/pieces.svg")
+        // console.log(pieces);
+        // project.activeLayer.addChild(pie);
+
+        function onResize(event) {
+            layer.position = view.center;
+        }
+    }
+
+    </script>
+</head>
+<body>
+    <canvas id="canvas" resize stats hidpi="off"></canvas>
+</body>
+</html>
