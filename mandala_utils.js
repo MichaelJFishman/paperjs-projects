@@ -146,6 +146,7 @@ function set_base_point_position(path, point){
 
 // TODO change to return output of callback. Make callback mandatory second arg.
 function load_paths(file_path, targetLayer=null, _callback = null){
+    console.log("loading paths")
     var path_list = [];
     local_url = "http://localhost:8000/";
     url = local_url + file_path;
@@ -158,9 +159,15 @@ function load_paths(file_path, targetLayer=null, _callback = null){
             onLoad: function(item){
                 console.log("imported " + file_path);
                 console.log(view.center);
+                // var paths = item.getItems();
                 var paths = item.getItems({
                     class: Path
                 });
+                // var circles = item.getItems({
+                //     class: Circle
+                // });
+                // paths = paths.concat(circles);
+                // vars
                 for (var i = 0; i < paths.length; i++){
                     var p = paths[i];
                     path_list.push(p);
@@ -173,7 +180,6 @@ function load_paths(file_path, targetLayer=null, _callback = null){
                 }
             }
         });
-
     tempLayer.remove();
     activeLayer.activate();
     // if(_callback != null){
